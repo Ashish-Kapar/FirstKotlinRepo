@@ -1,6 +1,6 @@
 # FirstKotlinRepo
 
-My first Kotlin project, built while learning the language from scratch no usage of AI and all, just me working through bugs and concepts by hand reading the documentation.
+My first Kotlin project, built while learning the language from scratch, just me working through bugs and concepts by hand reading the documentation.
 
 ## Projects
 
