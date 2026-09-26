@@ -1,7 +1,7 @@
 import kotlin.system.exitProcess
 
 var data: MutableMap<String,String> = mutableMapOf()
-var tempMap: MutableMap<String,String> = mutableMapOf()
+
 
 fun main(){
     println("This is a program where you can manage your emails and passwords")
@@ -19,7 +19,8 @@ fun interfaceM(): Int{
         println(" | 3. Display an account")
         println(" | 4. Exit")
         println("-----------------------------------------")
-        response = readLine()!!.toInt()
+        response = readlnOrNull()?.toIntOrNull() ?: 4
+
         if (response in 1..4){
             return response
         }
@@ -31,15 +32,15 @@ fun interfaceM(): Int{
 }
 
 fun processE(n: Int){
-    tempMap= mutableMapOf()
+    var pair: Pair<String, String>
     when (n) {
         1 -> {
-            tempMap = inputE(n)
-            addE(tempMap.keys, tempMap.values)
+            pair = inputE(n)
+            addE(pair)
         }
         2 -> {
-            tempMap = inputE(n)
-            removeE(tempMap.keys)
+            pair = inputE(n)
+            removeE(pair.first)
         }
         3 -> {
             displayE()
@@ -51,64 +52,58 @@ fun processE(n: Int){
     }
 }
 
-fun inputE(n:Int): MutableMap<String,String>{
+
+
+fun inputE(n:Int): Pair<String,String>{
     var email: String
     var password: String
     var response: Int
-    val myMap: MutableMap<String,String> = mutableMapOf()
     while (true){
         print("Enter your email: ")
-        email = readLine()!!.toString()
+        email = readln()
         print("Enter your password: ")
-        password= readLine()!!.toString()
+        password= readln()
         response = checkE(email,password,n)
         if (response == 0){
-            myMap[email] = password
-                return myMap
+            return Pair(email,password)
         }
     }
 }
 
 
 
-fun addE(keys: MutableSet<String>, values: MutableCollection<String>) {
-    data[keys.toString()] = values.toString()
+fun addE(pair: Pair<String,String>) {
+    data[pair.first] = pair.second
     println("Your account was successfully added \n")
-
 }
 
-fun removeE(keys: MutableSet<String>) {
-    var keyT: String
+fun removeE(email: String) {
 
-    for (key in keys){
-
-        keyT = "[${key}]"
-        if (keyT in data.keys){
-
-            println("Your account was removed successfully")
-
-        }
-        else{
-            println("Sorry but the email doesnt exist")
-        }
-        data.remove(keyT)
+    if (email in data.keys){
+        println("Your account was removed successfully")
     }
-
+    else{
+        println("Sorry but the email doesnt exist")
+    }
+    data.remove(email)
 }
+
 
 fun displayE() {
     println("Accounts & Passwords")
     println("$data \n")
-
 }
 
 fun checkE(email: String,password: String,n:Int): Int{
+
     if (n!=2){
-        if ("[$email]" in data.keys){
+        if (email in data.keys){
             println("The given email already exists")
             return 1
         }
         if ("." in email && "@" in email){
+            // email before @ should have at least 5 characters and...
+            // after that the minimum u can get is @edu.com
             if (password.count()>=8){
                 return 0
             }
@@ -122,5 +117,3 @@ fun checkE(email: String,password: String,n:Int): Int{
         return 0
     }
 }
-
-
